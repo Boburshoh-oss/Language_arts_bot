@@ -14,5 +14,5 @@ CHANNELS = ["-1001256838356"]
 import os
 # .env fayl ichidan quyidagilarni o'qiymiz
 BOT_TOKEN = str(os.environ.get("BOT_TOKEN"))
-ADMINS = list(os.environ.get("ADMINS"))
+ADMINS = os.environ.get("ADMINS").split(",")
 IP = str(os.environ.get('ip'))
