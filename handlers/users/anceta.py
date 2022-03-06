@@ -123,7 +123,10 @@ async def answer_smena(message:types.Message,state:FSMContext):
     msg += f"✅ F.I.O - {name}\n"
     admins_msg += f"✅ <b>F.I.O</b> - {name}\n"
     msg += f"📞 telfon raqamingiz - {phone}\n"
-    admins_msg += f"📞 <b>telfon raqami</b> - {phone}\n"
+    if "+" not in phone:
+        admins_msg += f"📞 <b>telfon raqami</b> - +{phone}\n"
+    else:
+        admins_msg += f"📞 <b>telfon raqami</b> - {phone}\n"
     msg += f"📚 Siz tanlagan kurs - {course_data}\n"
     admins_msg += f"📚 <b>Kursi</b> - {course_data}\n"
     if level is not None:
