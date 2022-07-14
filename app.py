@@ -1,10 +1,9 @@
 from aiogram import executor
 
-from loader import dp
 # from utils.notify_admins import on_startup_notify
 from utils.set_bot_commands import set_default_commands
 from aiogram.utils.executor import start_webhook
-from loader import bot
+from loader import bot,dp
 WEBHOOK_HOST = 'https://languageartsbot.herokuapp.com/'
 WEBHOOK_PATH = ''
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
