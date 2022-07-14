@@ -4,13 +4,14 @@ from aiogram import executor
 from utils.set_bot_commands import set_default_commands
 from aiogram.utils.executor import start_webhook
 from loader import bot,dp
+import os
 WEBHOOK_HOST = 'https://languageartsbot.herokuapp.com/'
-WEBHOOK_PATH = ''
+WEBHOOK_PATH = f"setwebhook/{str(os.environ.get('BOT_TOKEN'))}/"
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
 # webserver settings
-WEBAPP_HOST = 'https://languageartsbot.herokuapp.com/'  # or ip
-WEBAPP_PORT = 3001 
+WEBAPP_HOST = '0.0.0.0'  # or ip
+WEBAPP_PORT = 8000 
 
 async def on_startup(dp):
     # Birlamchi komandalar (/star va /help)
@@ -41,8 +42,8 @@ if __name__ == '__main__':
         on_startup=on_startup,
         on_shutdown=on_shutdown,
         skip_updates=True,
-        # host=WEBAPP_HOST,
-        # port=WEBAPP_PORT,
+        host=WEBAPP_HOST,
+        port=WEBAPP_PORT,
     )
 
 
