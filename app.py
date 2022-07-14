@@ -14,9 +14,9 @@ WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 WEBAPP_HOST = 'localhost'  # or ip
 WEBAPP_PORT = 3001
 
-async def on_startup(dispatcher):
+async def on_startup(dp):
     # Birlamchi komandalar (/star va /help)
-    await set_default_commands(dispatcher)
+    await set_default_commands(dp)
     await bot.set_webhook(WEBHOOK_URL)
 
 
