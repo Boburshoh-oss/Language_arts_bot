@@ -5,8 +5,9 @@ from utils.set_bot_commands import set_default_commands
 from aiogram.utils.executor import start_webhook
 from loader import bot,dp
 import os
+from data.config import BOT_TOKEN
 WEBHOOK_HOST = 'https://languageartsbot.herokuapp.com/'
-WEBHOOK_PATH = f"setwebhook/{str(os.environ.get('BOT_TOKEN'))}/"
+WEBHOOK_PATH = f"setwebhook/{BOT_TOKEN}/"
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
 # webserver settings
