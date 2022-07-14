@@ -18,7 +18,7 @@ WEBAPP_PORT = 8000
 
 async def on_startup(dp):
     # Birlamchi komandalar (/star va /help)
-    await set_default_commands(dp)
+    # await set_default_commands(dp)
     await bot.set_webhook(WEBHOOK_URL)
 
 
