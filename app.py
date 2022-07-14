@@ -1,7 +1,6 @@
 from aiogram import executor
 
-from .loader import dp
-import middlewares, filters, handlers
+from loader import dp
 # from utils.notify_admins import on_startup_notify
 from utils.set_bot_commands import set_default_commands
 from aiogram.utils.executor import start_webhook
