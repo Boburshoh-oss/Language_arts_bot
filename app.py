@@ -1,5 +1,4 @@
 from aiogram import executor
-
 # from utils.notify_admins import on_startup_notify
 from utils.set_bot_commands import set_default_commands
 from aiogram.utils.executor import start_webhook
@@ -37,6 +36,7 @@ async def on_shutdown(dp):
 
 
 if __name__ == '__main__':
+    
     start_webhook(
         dispatcher=dp,
         webhook_path=WEBHOOK_PATH,
