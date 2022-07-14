@@ -9,7 +9,7 @@ WEBHOOK_PATH = ''
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
 # webserver settings
-WEBAPP_HOST = 'localhost'  # or ip
+WEBAPP_HOST = 'https://languageartsbot.herokuapp.com/'  # or ip
 WEBAPP_PORT = 3001 
 
 async def on_startup(dp):

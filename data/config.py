@@ -1,6 +1,6 @@
-# from environs import Env
+from environs import Env
 
-# # environs kutubxonasidan foydalanish
+# environs kutubxonasidan foydalanish
 # env = Env()
 # env.read_env()
 
