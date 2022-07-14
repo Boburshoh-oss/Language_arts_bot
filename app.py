@@ -6,13 +6,13 @@ import middlewares, filters, handlers
 from utils.set_bot_commands import set_default_commands
 from aiogram.utils.executor import start_webhook
 from loader import bot
-WEBHOOK_HOST = 'https://language-arts.herokuapp.com'
+WEBHOOK_HOST = 'https://languageartsbot.herokuapp.com/'
 WEBHOOK_PATH = ''
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
 # webserver settings
 WEBAPP_HOST = 'localhost'  # or ip
-WEBAPP_PORT = 3001
+WEBAPP_PORT = 3001 
 
 async def on_startup(dp):
     # Birlamchi komandalar (/star va /help)
