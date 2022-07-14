@@ -37,6 +37,7 @@ async def on_shutdown(dp):
     await dp.storage.close()
     await dp.storage.wait_closed()
 
+app= get_new_configured_app(dispatcher= dp, path= WEBHOOK_PATH) 
 
 if __name__ == '__main__':
     
@@ -49,7 +50,6 @@ if __name__ == '__main__':
         host=WEBAPP_HOST,
         port=WEBAPP_PORT,
     )
-    app= get_new_configured_app(dispatcher= dp, path= WEBHOOK_PATH) 
     app.on_startup.append (on_startup)
     app.on_shutdown.append (on_shutdown)
     web.run_app (app, host= WEBAPP_HOST, port= WEBAPP_PORT)
