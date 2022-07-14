@@ -11,7 +11,7 @@ WEBHOOK_PATH = f"/setwebhook/{BOT_TOKEN}/"
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
 # webserver settings
-WEBAPP_HOST = 'languageartsbot.herokuapp.com'  # or ip
+WEBAPP_HOST = '0.0.0.0'  # or ip
 WEBAPP_PORT = 8000 
 
 async def on_startup(dp):
