@@ -1,4 +1,4 @@
-from aiogram import executor
+from aiogram import types
 # from utils.notify_admins import on_startup_notify
 from utils.set_bot_commands import set_default_commands
 from aiogram.utils.executor import start_webhook
@@ -33,7 +33,6 @@ async def echo(message: types.Message):
     return SendMessage(message.chat.id, message.text)
 
 async def on_shutdown(dp):
-    logging.warning('Shutting down..')
     # insert code here to run it before shutdown
 
     # Remove webhook (not acceptable in some cases)
@@ -42,7 +41,6 @@ async def on_shutdown(dp):
     # Close DB connection (if used)
     await dp.storage.close()
     await dp.storage.wait_closed()
-    logging.warning('Bye!')
 
 if __name__ == '__main__':
     
