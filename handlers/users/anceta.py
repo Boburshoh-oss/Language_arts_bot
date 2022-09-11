@@ -1,15 +1,17 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters import Command
 from states.personal_data import PersonalData
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton,ReplyKeyboardRemove, ContentType
+from aiogram.types import ReplyKeyboardRemove, ContentType
 from keyboards.default.start_menu import konatakt_button
 from keyboards.default.course_menu import course_menu
 from keyboards.default.language_menu import language_menu, level_menu,level_rus_menu
 from keyboards.default.smena_menu import smena_menu
 from loader import dp
 import logging
-from aiogram.types import Message, CallbackQuery
+import re
+from keyboards.inline.yes_no import check_anceta,sent,royhatdan_otish
+from keyboards.default.start_menu import menuStart
+from aiogram.types import  CallbackQuery
 from data.config import ADMINS
 from keyboards.inline.admin_connect import admin_msg_menu,admin_msg_menu_2
 
@@ -28,6 +30,17 @@ async def answer_full_name(message:types.Message,state:FSMContext):
     await message.answer("Kontaktingizni yuboring",reply_markup=konatakt_button)
     await PersonalData.phone_number.set()
 
+@dp.message_handler(state=PersonalData.phone_number)
+async def answer_error_number(message:types.Message,state:FSMContext):
+   
+    x = re.findall('[0-9]+', message.text)
+    x= ''.join(x)
+    await state.update_data(
+        {"phone_number":x}
+    )
+    await message.answer("qaysi kursimizga yozilmoqchisiz tanlang",reply_markup=course_menu)
+    await PersonalData.course.set()
+
 @dp.message_handler(state=PersonalData.phone_number,content_types=ContentType.CONTACT)
 async def answer_phone_num(message:types.Contact,state:FSMContext):
     phone_number = message.contact.phone_number
@@ -36,6 +49,7 @@ async def answer_phone_num(message:types.Contact,state:FSMContext):
     )
     await message.answer("qaysi kursimizga yozilmoqchisiz tanlang",reply_markup=course_menu)
     await PersonalData.course.set()
+
 
 @dp.message_handler(state=PersonalData.course,text_contains="Chet tili")
 async def answer_choose_language(message:types.Message,state:FSMContext):
@@ -118,34 +132,66 @@ async def answer_smena(message:types.Message,state:FSMContext):
     level = data.get("level")
     smena_data = data.get("smena")
     
-    msg = "💬 Sizning malumotlaringizni ko'rib chiqib tez orada aloqaga chiqamiz:\n"
-    admins_msg = "Yangi foydalanuvchi ro'yhatdan o'tdi:\n"
+    msg = "💬 Sizning malumotlaringiz to'g'rimi tasdiqlash tugmachasini bosing:\n"
+    
     msg += f"✅ F.I.O - {name}\n"
-    admins_msg += f"✅ <b>F.I.O</b> - {name}\n"
+    
     msg += f"📞 telfon raqamingiz - {phone}\n"
+    
+    msg += f"📚 Siz tanlagan kurs - {course_data}\n"
+    
+    if level is not None:
+        msg += f"📈 Sizning darajangiz - {level}\n"
+        
+    msg += f"🕑 Kurs vaqti - {smena_data}\n"
+    
+
+    # print(admins_msg)
+    await message.answer(msg,reply_markup=check_anceta)
+    
+    
+    # await message.answer("qaysi smemada o'qimoqchisiz")
+    # await PersonalData.smena.set()
+
+@dp.callback_query_handler(state=PersonalData.smena,text="checked_anceta")
+async def checked_anceta(call: CallbackQuery,state:FSMContext):
+    data = await state.get_data()
+    name = data.get("full_name")
+    phone = data.get("phone_number")
+    course_data = data.get("course")
+    level = data.get("level")
+    smena_data = data.get("smena")
+    # Oynada javob qaytaramiz
+    admins_msg = "Yangi foydalanuvchi ro'yhatdan o'tdi:\n"
+    admins_msg += f"✅ <b>F.I.O</b> - {name}\n"
     if "+" not in phone:
         admins_msg += f"📞 <b>telfon raqami</b> - +{phone}\n"
     else:
         admins_msg += f"📞 <b>telfon raqami</b> - {phone}\n"
-    msg += f"📚 Siz tanlagan kurs - {course_data}\n"
     admins_msg += f"📚 <b>Kursi</b> - {course_data}\n"
     if level is not None:
-        msg += f"📈 Sizning darajangiz - {level}\n"
         admins_msg += f"📈 <b>Darajasi</b> - {level}\n"
-    msg += f"🕑 Kurs vaqti - {smena_data}\n"
     admins_msg += f"🕑 <b>Kurs vaqti</b> - {smena_data}\n"
-
-    # print(admins_msg)
-    await message.answer(msg,reply_markup=ReplyKeyboardRemove())
     for admin in ADMINS:
         try:
             await dp.bot.send_message(admin, admins_msg,reply_markup=admin_msg_menu)
         except Exception as err:
             logging.exception(err)
-    await state.finish()
+    # print(call,"callbaaak")
     
-    # await message.answer("qaysi smemada o'qimoqchisiz")
-    # await PersonalData.smena.set()
+    await call.message.edit_reply_markup(reply_markup=sent)
+    await call.message.reply("Habaringiz adminlar tomonidan ko'rib chiqilmoqda...")
+    # await call.message("muvaffaqiyatli ro'yhatdan o'tdingniz!",reply_markup=ReplyKeyboardRemove)
+    await state.finish()
+    await call.answer()
+
+@dp.callback_query_handler(state=PersonalData.smena,text="error_anceta")
+async def error_anceta(call: CallbackQuery,state:FSMContext):
+    await call.message.delete()
+    await call.message.answer("Qaytadan start buyrug'i orqali ro'yxatdan o'ting... /start")
+    # Oynada javob qaytaramiz
+    await state.finish()
+    await call.answer()
 
 @dp.callback_query_handler(text="check")
 async def connect_user(call: CallbackQuery):
